@@ -23,66 +23,10 @@
  */
 package net.sf.jasperreports.engine.export.ooxml;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.geom.Dimension2D;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.net.URLEncoder;
-import java.text.AttributedCharacterIterator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import net.sf.jasperreports.engine.DefaultJasperReportsContext;
-import net.sf.jasperreports.engine.JRCommonText;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRGenericElementType;
-import net.sf.jasperreports.engine.JRGenericPrintElement;
-import net.sf.jasperreports.engine.JRLineBox;
-import net.sf.jasperreports.engine.JRPen;
-import net.sf.jasperreports.engine.JRPrintElement;
-import net.sf.jasperreports.engine.JRPrintElementIndex;
-import net.sf.jasperreports.engine.JRPrintFrame;
-import net.sf.jasperreports.engine.JRPrintGraphicElement;
-import net.sf.jasperreports.engine.JRPrintHyperlink;
-import net.sf.jasperreports.engine.JRPrintImage;
-import net.sf.jasperreports.engine.JRPrintLine;
-import net.sf.jasperreports.engine.JRPrintPage;
-import net.sf.jasperreports.engine.JRPrintText;
-import net.sf.jasperreports.engine.JRPropertiesUtil;
-import net.sf.jasperreports.engine.JRRuntimeException;
-import net.sf.jasperreports.engine.JRStyle;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReportsContext;
-import net.sf.jasperreports.engine.PrintPageFormat;
+import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
-import net.sf.jasperreports.engine.export.Cut;
-import net.sf.jasperreports.engine.export.CutsInfo;
-import net.sf.jasperreports.engine.export.ElementGridCell;
-import net.sf.jasperreports.engine.export.GenericElementHandlerEnviroment;
-import net.sf.jasperreports.engine.export.HyperlinkUtil;
-import net.sf.jasperreports.engine.export.JRExporterGridCell;
-import net.sf.jasperreports.engine.export.JRGridLayout;
-import net.sf.jasperreports.engine.export.JRHyperlinkProducer;
-import net.sf.jasperreports.engine.export.JRXlsAbstractExporter;
-import net.sf.jasperreports.engine.export.LengthUtil;
-import net.sf.jasperreports.engine.export.OccupiedGridCell;
-import net.sf.jasperreports.engine.export.XlsRowLevelInfo;
-import net.sf.jasperreports.engine.export.data.BooleanTextValue;
-import net.sf.jasperreports.engine.export.data.DateTextValue;
-import net.sf.jasperreports.engine.export.data.NumberTextValue;
-import net.sf.jasperreports.engine.export.data.StringTextValue;
-import net.sf.jasperreports.engine.export.data.TextValue;
-import net.sf.jasperreports.engine.export.data.TextValueHandler;
+import net.sf.jasperreports.engine.export.*;
+import net.sf.jasperreports.engine.export.data.*;
 import net.sf.jasperreports.engine.export.type.ImageAnchorTypeEnum;
 import net.sf.jasperreports.engine.export.zip.ExportZipEntry;
 import net.sf.jasperreports.engine.export.zip.FileBufferedZipEntry;
@@ -90,21 +34,25 @@ import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.type.LineDirectionEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.type.ScaleImageEnum;
-import net.sf.jasperreports.engine.util.DefaultFormatFactory;
-import net.sf.jasperreports.engine.util.FileBufferedOutputStream;
-import net.sf.jasperreports.engine.util.JRDataUtils;
-import net.sf.jasperreports.engine.util.JRStringUtil;
-import net.sf.jasperreports.engine.util.JRStyledText;
-import net.sf.jasperreports.engine.util.JRTypeSniffer;
-import net.sf.jasperreports.export.ExporterInput;
-import net.sf.jasperreports.export.ExporterInputItem;
-import net.sf.jasperreports.export.XlsReportConfiguration;
-import net.sf.jasperreports.export.XlsxExporterConfiguration;
-import net.sf.jasperreports.export.XlsxReportConfiguration;
+import net.sf.jasperreports.engine.util.*;
+import net.sf.jasperreports.export.*;
 import net.sf.jasperreports.renderers.DataRenderable;
 import net.sf.jasperreports.renderers.DimensionRenderable;
 import net.sf.jasperreports.renderers.Renderable;
 import net.sf.jasperreports.renderers.ResourceRenderer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.awt.*;
+import java.awt.geom.Dimension2D;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.net.URLEncoder;
+import java.text.AttributedCharacterIterator;
+import java.util.List;
+import java.util.*;
 
 
 /**
@@ -600,9 +548,25 @@ public class JRXlsxExporter extends JRXlsAbstractExporter<XlsxReportConfiguratio
 				href = customHandler.getHyperlink(link);
 			}
 		}
-
 		return href;
 	}
+
+	private String getInternalHyperlinkURL(JRStyledText styledText) {
+		int runLimit = 0;
+
+		AttributedCharacterIterator iterator = styledText.getAttributedString().getIterator();
+
+		while(runLimit < styledText.length() && (runLimit = iterator.getRunLimit()) <= styledText.length()) {
+			Map<AttributedCharacterIterator.Attribute, Object> attrs = iterator.getAttributes();
+			JRPrintHyperlink hyperlink = (JRPrintHyperlink) attrs.get(JRTextAttribute.HYPERLINK);
+			if (hyperlink != null) {
+				return getHyperlinkURL(hyperlink);
+			}
+			iterator.setIndex(runLimit);
+		}
+		return null;
+	}
+
 
 
 //	protected void endHyperlink(boolean isText)
@@ -1451,6 +1415,9 @@ public class JRXlsxExporter extends JRXlsAbstractExporter<XlsxReportConfiguratio
 		}
 
 		String href = getHyperlinkURL(text);
+		if (href == null) {
+			href = getInternalHyperlinkURL(styledText);
+		}
 		if (href != null)
 		{
 			sheetHelper.exportHyperlink(
