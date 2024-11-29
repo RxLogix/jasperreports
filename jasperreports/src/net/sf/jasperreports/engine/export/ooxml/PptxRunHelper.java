@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import net.sf.jasperreports.engine.JRPrintHyperlink;
 import net.sf.jasperreports.engine.JRPrintText;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JasperReportsContext;
@@ -39,6 +40,7 @@ import net.sf.jasperreports.engine.base.JRBasePrintText;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.util.JRColorUtil;
 import net.sf.jasperreports.engine.util.JRStringUtil;
+import net.sf.jasperreports.engine.util.JRTextAttribute;
 
 
 /**
@@ -50,15 +52,20 @@ public class PptxRunHelper extends BaseHelper
 	 *
 	 */
 	private String exporterKey;
-
+	private final PptxSlideRelsHelper slideRelsHelper;
 
 	/**
 	 *
 	 */
-	public PptxRunHelper(JasperReportsContext jasperReportsContext, Writer writer, String exporterKey)
+	public PptxRunHelper(
+                JasperReportsContext jasperReportsContext,
+                Writer writer,
+                String exporterKey,
+		PptxSlideRelsHelper slideRelsHelper)
 	{
 		super(jasperReportsContext, writer);
 		this.exporterKey = exporterKey;
+		this.slideRelsHelper = slideRelsHelper;
 	}
 
 
@@ -210,7 +217,11 @@ public class PptxRunHelper extends BaseHelper
 			write("        <a:ea typeface=\"" + fontFamily + "\"/>\n");
 			write("        <a:cs typeface=\"" + fontFamily + "\"/>\n");
 		}
-		
+		JRPrintHyperlink hyperlink = (JRPrintHyperlink)attrs.get(JRTextAttribute.HYPERLINK);
+		if (hyperlink != null)
+		{
+			write("        <a:hlinkClick r:id=\"rIdLnk" + slideRelsHelper.getHyperlink(hyperlink.getHyperlinkReference()) + "\"/>\n");
+		}
 		write("</" + tag + ">\n");
 	}
 

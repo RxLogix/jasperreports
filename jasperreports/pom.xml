@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.jasperreports</groupId>
 	<artifactId>jasperreports</artifactId>
-	<version>6.7.1</version>
+	<version>6.7.1.1-Rx</version>
 	<packaging>jar</packaging>
 	<name>JasperReports</name>
 	<url>http://jasperreports.sourceforge.net</url>
@@ -64,6 +64,10 @@
 		<repository>
 			<id>jr-snapshots</id>
 			<url>http://jaspersoft.jfrog.io/jaspersoft/jr-ce-snapshots/</url>
+		</repository>
+		<repository>
+			<id>rxlogix</id>
+			<url>http://10.100.3.6:8080/nexus/content/repositories/thirdparty</url>
 		</repository>
 	</repositories>
 	<build>
@@ -197,6 +201,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>RXLOGIX-thirdparty</id>
+			<name>RXLogix Thirdparty Repository</name>
+			<url>http://10.100.3.6:8080/nexus/content/repositories/thirdparty/</url>
+		</repository>
+	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>commons-beanutils</groupId>

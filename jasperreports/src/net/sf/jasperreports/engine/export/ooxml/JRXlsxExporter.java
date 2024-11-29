@@ -94,6 +94,7 @@ import net.sf.jasperreports.engine.util.FileBufferedOutputStream;
 import net.sf.jasperreports.engine.util.JRDataUtils;
 import net.sf.jasperreports.engine.util.JRStringUtil;
 import net.sf.jasperreports.engine.util.JRStyledText;
+import net.sf.jasperreports.engine.util.JRTextAttribute;
 import net.sf.jasperreports.engine.util.JRTypeSniffer;
 import net.sf.jasperreports.export.ExporterInput;
 import net.sf.jasperreports.export.ExporterInputItem;
@@ -602,9 +603,25 @@ public class JRXlsxExporter extends JRXlsAbstractExporter<XlsxReportConfiguratio
 				href = customHandler.getHyperlink(link);
 			}
 		}
-
 		return href;
 	}
+
+	private String getInternalHyperlinkURL(JRStyledText styledText) {
+		int runLimit = 0;
+
+		AttributedCharacterIterator iterator = styledText.getAttributedString().getIterator();
+
+		while(runLimit < styledText.length() && (runLimit = iterator.getRunLimit()) <= styledText.length()) {
+			Map<AttributedCharacterIterator.Attribute, Object> attrs = iterator.getAttributes();
+			JRPrintHyperlink hyperlink = (JRPrintHyperlink) attrs.get(JRTextAttribute.HYPERLINK);
+			if (hyperlink != null) {
+				return getHyperlinkURL(hyperlink);
+			}
+			iterator.setIndex(runLimit);
+		}
+		return null;
+	}
+
 
 
 //	protected void endHyperlink(boolean isText)
@@ -1489,6 +1506,9 @@ public class JRXlsxExporter extends JRXlsAbstractExporter<XlsxReportConfiguratio
 		}
 
 		String href = getHyperlinkURL(text);
+		if (href == null) {
+			href = getInternalHyperlinkURL(styledText);
+		}
 		if (href != null)
 		{
 			sheetHelper.exportHyperlink(
