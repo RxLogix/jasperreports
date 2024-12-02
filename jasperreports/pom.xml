@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.jasperreports</groupId>
 	<artifactId>jasperreports</artifactId>
-	<version>6.4.0.2-Rx</version>
+	<version>6.4.0.2-Rx-temp</version>
 	<packaging>jar</packaging>
 	<name>JasperReports</name>
 	<url>http://jasperreports.sourceforge.net</url>
@@ -422,8 +422,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-			<version>1.7</version>
+			<artifactId>velocity-engine-core</artifactId>
+			<version>2.0</version>
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
