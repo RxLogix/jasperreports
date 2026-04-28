@@ -58,7 +58,7 @@
 		</repository>
 		<repository>
 			<id>rxlogix</id>
-			<url>http://10.100.3.6:8080/nexus/content/repositories/thirdparty</url>
+			<url>http://10.100.21.16:8080/repository/thirdparty</url>
 		</repository>
 	</repositories>
 	<build>
@@ -179,7 +179,7 @@
 		<repository>
 			<id>RXLOGIX-thirdparty</id>
 			<name>RXLogix Thirdparty Repository</name>
-			<url>http://10.100.3.6:8080/nexus/content/repositories/thirdparty/</url>
+			<url>http://10.100.21.16:8080/repository/thirdparty</url>
 		</repository>
 		<snapshotRepository>
 			<id>jr-ce-snapshots</id>
