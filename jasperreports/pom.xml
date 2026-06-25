@@ -179,13 +179,9 @@
 		<repository>
 			<id>RXLOGIX-thirdparty</id>
 			<name>RXLogix Thirdparty Repository</name>
-			<url>http://10.100.21.16:8080/repository/thirdparty</url>
+			<url>https://nexus-repo-eng.rxlogix.com/repository/thirdparty/</url>
+<!--			<url>http://localhost:8081/repository/thirdparty/</url>-->
 		</repository>
-		<snapshotRepository>
-			<id>jr-ce-snapshots</id>
-			<name>JasperReports CE Snapshots</name>
-			<url>http://jaspersoft.jfrog.io/jaspersoft/jr-ce-snapshots</url>
-		</snapshotRepository>
 	</distributionManagement>
 	<dependencies>
 		<dependency>
