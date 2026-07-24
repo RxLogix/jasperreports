@@ -38,7 +38,7 @@ import net.sf.jasperreports.functions.FunctionsUtil;
 /**
  * @author Lucian Chirita (lucianc@users.sourceforge.net)
  */
-public abstract class AbstractClassFilter implements ClassLoaderFilter
+public abstract class AbstractClassFilter implements DeserializationFilter
 {
 	protected abstract String getClassFilterEnabledPropertyName();
 

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.jasperreports</groupId>
 	<artifactId>jasperreports</artifactId>
-	<version>6.4.0.3-Rx</version>
+	<version>6.4.0.4-Rx</version>
 	<packaging>jar</packaging>
 	<name>JasperReports</name>
 	<url>http://jasperreports.sourceforge.net</url>
@@ -179,13 +179,9 @@
 		<repository>
 			<id>RXLOGIX-thirdparty</id>
 			<name>RXLogix Thirdparty Repository</name>
-			<url>http://10.100.21.16:8080/repository/thirdparty</url>
+			<url>https://nexus-repo-eng.rxlogix.com/repository/thirdparty/</url>
+<!--			<url>http://localhost:8081/repository/thirdparty/</url>-->
 		</repository>
-		<snapshotRepository>
-			<id>jr-ce-snapshots</id>
-			<name>JasperReports CE Snapshots</name>
-			<url>http://jaspersoft.jfrog.io/jaspersoft/jr-ce-snapshots</url>
-		</snapshotRepository>
 	</distributionManagement>
 	<dependencies>
 		<dependency>
